@@ -6,14 +6,16 @@
     <title>Plano de Treino: Fundação Anabólica</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chosen Palette: Modern Indigo -->
+    <!-- Chosen Palette: Cyberpunk Neon -->
     <!-- Application Structure Plan: A tab-based SPA structure was chosen, navigated by day-of-the-week buttons. A dynamic content area displays the selected day's workout (as an interactive table with inputs) or rest day guidelines. This structure directly maps to the user's weekly routine, making it highly intuitive and easy to use during a gym session. A summary bar chart provides a high-level overview of the weekly training volume, reinforcing the program's structure. -->
     <!-- Visualization & Content Choices: 1. Workout Plan (Table from report) -> Goal: Organize/Inform -> Viz: Interactive HTML Table -> Interaction: Inputs for load/reps -> Justification: Allows for real-time workout tracking, turning a static plan into a dynamic log. 2. Weekly Volume (Derived from report data) -> Goal: Compare/Inform -> Viz: Bar Chart (Chart.js/Canvas) -> Interaction: Static display -> Justification: Visually summarizes the training load across the week, motivating the user and clarifying the program's demands. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
+            background: #0D0F18;
+            overflow-x: hidden;
         }
         .chart-container {
             position: relative;
@@ -28,183 +30,235 @@
             }
         }
         .nav-btn.active {
-            background-image: linear-gradient(to right, #4f46e5, #6366f1);
-            color: white;
-            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.30);
+            background-color: #8B5CF6;
+            color: #E0E7FF;
+            box-shadow: 0 0 15px 5px rgba(139, 92, 246, 0.4);
         }
         .nav-btn {
-            transition: all 0.2s ease-in-out;
+            transition: all 0.3s ease;
+            border: 1px solid #374151;
+        }
+        .nav-btn:hover {
+            border-color: #8B5CF6;
+            color: #E0E7FF;
+        }
+
+        .day-content {
+            background: rgba(29, 32, 47, 0.6);
+            border: 1px solid #374151;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        input[type="number"] {
+            background-color: #1F2937;
+            border: 1px solid #4B5563;
+            color: #E5E7EB;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.5);
+        }
+
+        .glowing-text {
+            text-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
+        }
+
+        .animated-bg {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(315deg, rgba(139,92,246,0.1) 0%, rgba(13,15,24,0.1) 50%, rgba(139,92,246,0.1) 100%);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen">
+<body class="text-slate-200 min-h-screen">
+    <div class="animated-bg"></div>
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 relative z-10">
         
         <header class="text-center mb-10">
-            <h1 class="text-4xl sm:text-5xl font-bold text-slate-900">Plano de Treino</h1>
-            <p class="text-lg text-indigo-600 font-semibold mt-1">Fase 1: Fundação Anabólica</p>
+            <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-wider">PLANO DE TREINO</h1>
+            <p class="text-lg text-violet-400 font-semibold mt-1 glowing-text">FASE 1: FUNDAÇÃO ANABÓLICA</p>
         </header>
 
         <nav class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
-            <button data-day="1" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-white text-slate-700 shadow-sm">Segunda</button>
-            <button data-day="2" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-white text-slate-700 shadow-sm">Terça</button>
-            <button data-day="3" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-white text-slate-700 shadow-sm">Quarta</button>
-            <button data-day="4" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-white text-slate-700 shadow-sm">Quinta</button>
-            <button data-day="5" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-white text-slate-700 shadow-sm">Sexta</button>
-            <button data-day="6" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-white text-slate-700 shadow-sm">Fim de Semana</button>
+            <button data-day="1" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Segunda</button>
+            <button data-day="2" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Terça</button>
+            <button data-day="3" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Quarta</button>
+            <button data-day="4" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Quinta</button>
+            <button data-day="5" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Sexta</button>
+            <button data-day="6" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Fim de Semana</button>
         </nav>
 
         <main id="content-container">
             
-            <div id="day-1" class="day-content hidden bg-white p-6 rounded-2xl shadow-lg">
+            <div id="day-1" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-indigo-600">SUPERIOR - Força/Tensão</h2>
-                    <p class="text-slate-600 mt-2">Foco em mover cargas pesadas com controle absoluto para construir uma base sólida de poder. **Descanso: 120-180 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">SUPERIOR - FORÇA/TENSÃO</h2>
+                    <p class="text-slate-400 mt-2">Foco em cargas pesadas com controle absoluto. **Descanso: 120-180 segundos.**</p>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50">
+                        <thead class="border-b border-gray-700">
                             <tr>
-                                <th class="p-3 font-semibold">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell">Séries</th>
-                                <th class="p-3 font-semibold text-center">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24">Reps Feitas</th>
+                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
+                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
+                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b"><td class="p-3">Supino Reto com Barra</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Remada Curvada com Barra</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Desenvolvimento Militar (em pé)</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">6-10</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Barra Fixa (ou Puxador Frontal)</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">Máx (6-10)</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr><td class="p-3">Mergulho nas Paralelas</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">Máx (6-10)</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Supino Reto com Barra</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Remada Curvada com Barra</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Desenvolvimento Militar (em pé)</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">6-10</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Barra Fixa (ou Puxador Frontal)</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">Máx (6-10)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr><td class="p-3">Mergulho nas Paralelas</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">Máx (6-10)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="day-2" class="day-content hidden bg-white p-6 rounded-2xl shadow-lg">
+            <div id="day-2" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-indigo-600">INFERIOR - Força/Tensão</h2>
-                    <p class="text-slate-600 mt-2">Hoje construímos a fundação. Pernas fortes são o motor para o crescimento do corpo inteiro. **Descanso: 120-180 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">INFERIOR - FORÇA/TENSÃO</h2>
+                    <p class="text-slate-400 mt-2">Pernas fortes são o motor para o crescimento do corpo inteiro. **Descanso: 120-180 segundos.**</p>
                 </div>
-                <div class="overflow-x-auto">
+                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50">
+                        <thead class="border-b border-gray-700">
                             <tr>
-                                <th class="p-3 font-semibold">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell">Séries</th>
-                                <th class="p-3 font-semibold text-center">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24">Reps Feitas</th>
+                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
+                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
+                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b"><td class="p-3">Agachamento Livre com Barra</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Levantamento Terra Romeno</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">6-10</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Leg Press 45º</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">8-10</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr><td class="p-3">Panturrilha em Pé</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Agachamento Livre com Barra</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Levantamento Terra Romeno</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">6-10</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Leg Press 45º</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">8-10</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr><td class="p-3">Panturrilha em Pé</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="day-3" class="day-content hidden bg-white p-6 rounded-2xl shadow-lg text-center">
-                <h2 class="text-2xl font-bold text-indigo-600">DESCANSO ATIVO</h2>
-                <p class="text-slate-600 mt-2 mb-6">O músculo cresce no descanso. Hoje, o objetivo é otimizar a recuperação para voltar mais forte.</p>
+            <div id="day-3" class="day-content hidden p-6 rounded-2xl shadow-lg text-center">
+                <h2 class="text-2xl font-bold text-violet-400 glowing-text">DESCANSO ATIVO</h2>
+                <p class="text-slate-400 mt-2 mb-6">Otimize a recuperação para voltar mais forte.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                    <div class="bg-slate-50 p-4 rounded-lg">
-                        <h3 class="font-bold text-lg text-slate-800">🏃‍♂️ Atividade</h3>
-                        <p class="text-slate-600">Caminhada leve de 20-30 minutos ou uma sessão de alongamentos e mobilidade.</p>
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                        <h3 class="font-bold text-lg text-slate-200">Atividade</h3>
+                        <p class="text-slate-400">Caminhada leve de 20-30 minutos ou alongamentos.</p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-lg">
-                        <h3 class="font-bold text-lg text-slate-800">🍎 Nutrição</h3>
-                        <p class="text-slate-600">Mantenha a meta de calorias e proteínas alta. A nutrição hoje é o tijolo para a construção de amanhã.</p>
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                        <h3 class="font-bold text-lg text-slate-200">Nutrição</h3>
+                        <p class="text-slate-400">Mantenha as calorias e proteínas altas.</p>
                     </div>
                 </div>
             </div>
 
-            <div id="day-4" class="day-content hidden bg-white p-6 rounded-2xl shadow-lg">
+            <div id="day-4" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-indigo-600">SUPERIOR - Hipertrofia/Estresse</h2>
-                    <p class="text-slate-600 mt-2">Foco em "pump" e queimação muscular para esculpir os detalhes. **Descanso: 60-75 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">SUPERIOR - HIPERTROFIA/ESTRESSE</h2>
+                    <p class="text-slate-400 mt-2">Foco em "pump" e queimação muscular para esculpir os detalhes. **Descanso: 60-75 segundos.**</p>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50">
+                         <thead class="border-b border-gray-700">
                             <tr>
-                                <th class="p-3 font-semibold">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell">Séries</th>
-                                <th class="p-3 font-semibold text-center">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24">Reps Feitas</th>
+                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
+                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
+                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b"><td class="p-3">Supino Inclinado com Halteres</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Remada Unilateral (Serrote)</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12 (cada)</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Elevação Lateral com Halteres</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Crossover na Polia Média</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">12-15</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Rosca Direta com Halteres</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr><td class="p-3">Tríceps Testa com Halteres</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Supino Inclinado com Halteres</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Remada Unilateral (Serrote)</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12 (cada)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Elevação Lateral com Halteres</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Crossover na Polia Média</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">12-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Rosca Direta com Halteres</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr><td class="p-3">Tríceps Testa com Halteres</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="day-5" class="day-content hidden bg-white p-6 rounded-2xl shadow-lg">
+            <div id="day-5" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-indigo-600">INFERIOR - Hipertrofia/Estresse</h2>
-                    <p class="text-slate-600 mt-2">É o último treino da semana. Deixe tudo na academia. Foco na fadiga muscular e na queimação que sinaliza o crescimento. **Descanso: 60-75 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">INFERIOR - HIPERTROFIA/ESTRESSE</h2>
+                    <p class="text-slate-400 mt-2">Último treino da semana. Foco na fadiga muscular. **Descanso: 60-75 segundos.**</p>
                 </div>
-                <div class="overflow-x-auto">
-                     <table class="w-full text-left">
-                        <thead class="bg-slate-50">
+                 <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                         <thead class="border-b border-gray-700">
                             <tr>
-                                <th class="p-3 font-semibold">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell">Séries</th>
-                                <th class="p-3 font-semibold text-center">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24">Reps Feitas</th>
+                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
+                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
+                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
+                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b"><td class="p-3">Agachamento Hack ou Afundo</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12 (cada)</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Cadeira Extensora</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">15-20</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Mesa Flexora</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr class="border-b"><td class="p-3">Cadeira Adutora</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">15-20</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
-                            <tr><td class="p-3">Panturrilha Sentado</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">15-25</td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md border-slate-300 text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Agachamento Hack ou Afundo</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12 (cada)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Cadeira Extensora</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">15-20</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Mesa Flexora</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr class="border-b border-gray-800"><td class="p-3">Cadeira Adutora</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">15-20</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
+                            <tr><td class="p-3">Panturrilha Sentado</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">15-25</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="day-6" class="day-content hidden bg-white p-6 rounded-2xl shadow-lg text-center">
-                 <h2 class="text-2xl font-bold text-indigo-600">DESCANSO TOTAL</h2>
-                 <p class="text-slate-600 mt-2 mb-6">Você conquistou seu descanso. A disciplina na recuperação é tão crucial quanto a disciplina no treino.</p>
+            <div id="day-6" class="day-content hidden p-6 rounded-2xl shadow-lg text-center">
+                 <h2 class="text-2xl font-bold text-violet-400 glowing-text">DESCANSO TOTAL</h2>
+                 <p class="text-slate-400 mt-2 mb-6">A recuperação é tão crucial quanto o treino.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-                    <div class="bg-slate-50 p-4 rounded-lg">
-                        <h3 class="font-bold text-lg text-slate-800">🛌 Atividade</h3>
-                        <p class="text-slate-600">Mínima. Priorize o sono de qualidade, pois é quando seu corpo libera os hormônios de crescimento.</p>
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                        <h3 class="font-bold text-lg text-slate-200">Atividade</h3>
+                        <p class="text-slate-400">Mínima. Priorize o sono de qualidade.</p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-lg">
-                        <h3 class="font-bold text-lg text-slate-800">💧 Hidratação</h3>
-                        <p class="text-slate-600">Beba bastante água durante todo o dia para manter os músculos e articulações saudáveis.</p>
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                        <h3 class="font-bold text-lg text-slate-200">Hidratação</h3>
+                        <p class="text-slate-400">Beba bastante água durante o dia.</p>
                     </div>
-                     <div class="bg-slate-50 p-4 rounded-lg">
-                        <h3 class="font-bold text-lg text-slate-800">🍽️ Preparação</h3>
-                        <p class="text-slate-600">Use este tempo para preparar suas refeições. O sucesso da próxima semana começa agora.</p>
+                     <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                        <h3 class="font-bold text-lg text-slate-200">Preparação</h3>
+                        <p class="text-slate-400">Prepare suas refeições. O sucesso da próxima semana começa agora.</p>
                     </div>
                 </div>
             </div>
 
         </main>
         
-        <section class="mt-12 bg-white p-6 rounded-2xl shadow-lg">
+        <section class="mt-12 day-content p-6 rounded-2xl shadow-lg">
             <div class="mb-6 text-center">
-                <h2 class="text-2xl font-bold text-indigo-600">Distribuição de Volume Semanal</h2>
-                <p class="text-slate-600 mt-2">Este gráfico visualiza o volume de treino (total de séries) para cada dia.</p>
+                <h2 class="text-2xl font-bold text-violet-400 glowing-text">DISTRIBUIÇÃO DE VOLUME SEMANAL</h2>
+                <p class="text-slate-400 mt-2">Gráfico de volume de treino (total de séries) para cada dia.</p>
             </div>
             <div class="chart-container">
                 <canvas id="volumeChart"></canvas>
@@ -227,9 +281,13 @@
 
                 const dayId = dayDiv.id;
                 const rowIndex = Array.from(table.querySelectorAll('tbody tr')).indexOf(row);
-                const isCarga = input.closest('td').cellIndex === 3 || (window.innerWidth < 640 && input.closest('td').cellIndex === 2);
                 
-                return `workoutData-${dayId}-r${rowIndex}-${isCarga ? 'carga' : 'reps'}`;
+                const isMobile = window.innerWidth < 640;
+                let cellIndex = input.closest('td').cellIndex;
+                
+                const isCarga = isMobile ? cellIndex === 2 : cellIndex === 3;
+                
+                return `workoutDataFuturistic-${dayId}-r${rowIndex}-${isCarga ? 'carga' : 'reps'}`;
             }
 
             function saveDataToLocalStorage(key, value) {
@@ -257,14 +315,22 @@
                 });
             });
             
-            function showDay(dayIndex) {
-                contentDivs.forEach(div => div.classList.add('hidden'));
+            function showDay(dayIndex, isInitialLoad = false) {
+                contentDivs.forEach(div => {
+                    if(!isInitialLoad) {
+                        div.style.animation = 'none';
+                    }
+                    div.classList.add('hidden');
+                });
                 navButtons.forEach(btn => btn.classList.remove('active'));
 
                 const dayToShow = (dayIndex === 0 || dayIndex === 6) ? 6 : dayIndex;
 
                 const activeContent = document.getElementById(`day-${dayToShow}`);
                 if (activeContent) {
+                    if (!isInitialLoad) {
+                        activeContent.style.animation = 'fadeIn 0.6s ease-out';
+                    }
                     activeContent.classList.remove('hidden');
                 }
 
@@ -282,7 +348,7 @@
             });
 
             const today = new Date().getDay();
-            showDay(today);
+            showDay(today, true);
             loadDataFromLocalStorage();
 
             const ctx = document.getElementById('volumeChart').getContext('2d');
@@ -293,8 +359,8 @@
                     datasets: [{
                         label: 'Total de Séries por Treino',
                         data: [17, 16, 22, 19],
-                        backgroundColor: 'rgba(99, 102, 241, 0.6)',
-                        borderColor: 'rgba(99, 102, 241, 1)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.6)',
+                        borderColor: 'rgba(139, 92, 246, 1)',
                         borderWidth: 1,
                         borderRadius: 8,
                     }]
@@ -307,21 +373,23 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#f1f5f9',
-                            bodyColor: '#f1f5f9',
+                            backgroundColor: '#1F2937',
+                            titleColor: '#E5E7EB',
+                            bodyColor: '#E5E7EB',
                             padding: 10,
-                            cornerRadius: 6
+                            cornerRadius: 6,
+                            borderColor: '#8B5CF6',
+                            borderWidth: 1
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: '#e2e8f0'
+                                color: '#374151'
                             },
                             ticks: {
-                                color: '#475569'
+                                color: '#9CA3AF'
                             }
                         },
                         x: {
@@ -329,7 +397,7 @@
                                 display: false
                             },
                             ticks: {
-                                color: '#475569',
+                                color: '#9CA3AF',
                                 font: {
                                     size: 10
                                 }
