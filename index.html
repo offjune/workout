@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plano de Treino: Fundação Anabólica</title>
+    <title>Plano de Treino: Especialização Anabólica</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Chosen Palette: Cyberpunk Neon -->
@@ -15,6 +15,7 @@
         body {
             font-family: 'Rajdhani', sans-serif;
             background: #0D0F18;
+            color: #E5E7EB;
             overflow-x: hidden;
         }
         .chart-container {
@@ -60,6 +61,7 @@
             background-color: #1F2937;
             border: 1px solid #4B5563;
             color: #E5E7EB;
+            padding: 0.5rem;
         }
         input[type="number"]:focus {
             outline: none;
@@ -97,7 +99,7 @@
         
         <header class="text-center mb-10">
             <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-wider">PLANO DE TREINO</h1>
-            <p class="text-lg text-violet-400 font-semibold mt-1 glowing-text">FASE 1: FUNDAÇÃO ANABÓLICA</p>
+            <p class="text-lg text-violet-400 font-semibold mt-1 glowing-text">ESPECIALIZAÇÃO ANABÓLICA</p>
         </header>
 
         <nav class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
@@ -113,54 +115,107 @@
             
             <div id="day-1" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">SUPERIOR - FORÇA/TENSÃO</h2>
-                    <p class="text-slate-400 mt-2">Foco em cargas pesadas com controle absoluto. **Descanso: 120-180 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">SUPERIOR - TENSÃO & FORÇA</h2>
+                    <p class="text-slate-400 mt-2">Foco: Peito Pesado. Cargas máximas com controle absoluto.</p>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-700">
-                            <tr>
-                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
-                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-gray-800"><td class="p-3">Supino Reto com Barra</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Remada Curvada com Barra</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Desenvolvimento Militar (em pé)</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">6-10</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Barra Fixa (ou Puxador Frontal)</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">Máx (6-10)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr><td class="p-3">Mergulho nas Paralelas</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">Máx (6-10)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                        </tbody>
-                    </table>
+                <div class="space-y-4">
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0">
+                        <h3 class="font-bold text-lg text-slate-200">Supino Inclinado com Barra</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 6-8 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1">
+                        <h3 class="font-bold text-lg text-slate-200">Supino Reto com Halteres</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 6-8 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2">
+                        <h3 class="font-bold text-lg text-slate-200">Mergulho nas Paralelas (com peso)</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 6-10 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3">
+                        <h3 class="font-bold text-lg text-slate-200">Desenvolvimento com Halteres</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 8-10 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4">
+                        <h3 class="font-bold text-lg text-slate-200">Remada Curvada com Barra</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 6-8 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                     <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="5">
+                        <h3 class="font-bold text-lg text-slate-200">Tríceps na Polia (Corda)</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 8-12 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div id="day-2" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">INFERIOR - FORÇA/TENSÃO</h2>
-                    <p class="text-slate-400 mt-2">Pernas fortes são o motor para o crescimento do corpo inteiro. **Descanso: 120-180 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">INFERIOR - TENSÃO & FORÇA</h2>
+                    <p class="text-slate-400 mt-2">Foco: Glúteo Pesado. Construir a base de glúteos densos.</p>
                 </div>
-                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-700">
-                            <tr>
-                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
-                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-gray-800"><td class="p-3">Agachamento Livre com Barra</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">5-8</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Levantamento Terra Romeno</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">6-10</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Leg Press 45º</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">8-10</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr><td class="p-3">Panturrilha em Pé</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                        </tbody>
-                    </table>
+                 <div class="space-y-4">
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0">
+                        <h3 class="font-bold text-lg text-slate-200">Agachamento Livre Profundo</h3>
+                        <p class="text-sm text-slate-400 mb-2">5 Séries x 6-8 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1">
+                        <h3 class="font-bold text-lg text-slate-200">Elevação Pélvica (Hip Thrust)</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 8-10 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2">
+                        <h3 class="font-bold text-lg text-slate-200">Levantamento Terra Romeno</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 8-10 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3">
+                        <h3 class="font-bold text-lg text-slate-200">Leg Press 45º (Pés Altos)</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 8-12 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4">
+                        <h3 class="font-bold text-lg text-slate-200">Panturrilha em Pé</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 10-15 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -174,81 +229,128 @@
                     </div>
                     <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
                         <h3 class="font-bold text-lg text-slate-200">Nutrição</h3>
-                        <p class="text-slate-400">Mantenha as calorias e proteínas altas.</p>
+                        <p class="text-slate-400">Mantenha as calorias e proteínas altas. O crescimento acontece agora.</p>
                     </div>
                 </div>
             </div>
 
             <div id="day-4" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">SUPERIOR - HIPERTROFIA/ESTRESSE</h2>
-                    <p class="text-slate-400 mt-2">Foco em "pump" e queimação muscular para esculpir os detalhes. **Descanso: 60-75 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">SUPERIOR - VOLUME & PUMP</h2>
+                    <p class="text-slate-400 mt-2">Foco: Pump de Peito. Inundar o músculo com sangue.</p>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                         <thead class="border-b border-gray-700">
-                            <tr>
-                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
-                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-gray-800"><td class="p-3">Supino Inclinado com Halteres</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Remada Unilateral (Serrote)</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12 (cada)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Elevação Lateral com Halteres</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Crossover na Polia Média</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">12-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Rosca Direta com Halteres</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">8-12</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr><td class="p-3">Tríceps Testa com Halteres</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                        </tbody>
-                    </table>
+                <div class="space-y-4">
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0">
+                        <h3 class="font-bold text-lg text-slate-200">Crucifixo Inclinado com Halteres</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 12-15 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1">
+                        <h3 class="font-bold text-lg text-slate-200">Supino na Máquina (Articulado)</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 10-12 Reps Alvo (+Drop Set)</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2">
+                        <h3 class="font-bold text-lg text-slate-200">Crossover na Polia Alta</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 15-20 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3">
+                        <h3 class="font-bold text-lg text-slate-200">Elevação Lateral com Halteres</h3>
+                        <p class="text-sm text-slate-400 mb-2">5 Séries x 15-20 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4">
+                        <h3 class="font-bold text-lg text-slate-200">Puxada Frontal com Pegada Aberta</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 12-15 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="5">
+                        <h3 class="font-bold text-lg text-slate-200">Rosca Scott com Barra W</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 10-15 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div id="day-5" class="day-content hidden p-6 rounded-2xl shadow-lg">
                 <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">INFERIOR - HIPERTROFIA/ESTRESSE</h2>
-                    <p class="text-slate-400 mt-2">Último treino da semana. Foco na fadiga muscular. **Descanso: 60-75 segundos.**</p>
+                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">INFERIOR - VOLUME & ISOLAMENTO</h2>
+                    <p class="text-slate-400 mt-2">Foco: Glúteo Redondo. Esculpir e dar formato.</p>
                 </div>
-                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                         <thead class="border-b border-gray-700">
-                            <tr>
-                                <th class="p-3 font-semibold text-slate-300">Exercício</th>
-                                <th class="p-3 font-semibold text-center hidden sm:table-cell text-slate-300">Séries</th>
-                                <th class="p-3 font-semibold text-center text-slate-300">Reps Alvo</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Carga (kg)</th>
-                                <th class="p-3 font-semibold text-center w-24 text-slate-300">Reps Feitas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-gray-800"><td class="p-3">Agachamento Hack ou Afundo</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">8-12 (cada)</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Cadeira Extensora</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">15-20</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Mesa Flexora</td><td class="p-3 text-center hidden sm:table-cell">4</td><td class="p-3 text-center">10-15</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr class="border-b border-gray-800"><td class="p-3">Cadeira Adutora</td><td class="p-3 text-center hidden sm:table-cell">3</td><td class="p-3 text-center">15-20</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                            <tr><td class="p-3">Panturrilha Sentado</td><td class="p-3 text-center hidden sm:table-cell">5</td><td class="p-3 text-center">15-25</td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td><td class="p-3"><input type="number" class="w-full rounded-md text-center"></td></tr>
-                        </tbody>
-                    </table>
+                 <div class="space-y-4">
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0">
+                        <h3 class="font-bold text-lg text-slate-200">Afundo Búlgaro</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 10-12 (cada) Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1">
+                        <h3 class="font-bold text-lg text-slate-200">Coice na Polia Baixa</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 15-20 (cada) Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2">
+                        <h3 class="font-bold text-lg text-slate-200">Cadeira Abdutora</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 20-25 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3">
+                        <h3 class="font-bold text-lg text-slate-200">Mesa Flexora</h3>
+                        <p class="text-sm text-slate-400 mb-2">4 Séries x 12-15 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
+                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4">
+                        <h3 class="font-bold text-lg text-slate-200">Elevação Pélvica (Leve)</h3>
+                        <p class="text-sm text-slate-400 mb-2">3 Séries x 20-30 Reps Alvo</p>
+                        <div class="flex gap-4">
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div>
+                            <div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div id="day-6" class="day-content hidden p-6 rounded-2xl shadow-lg text-center">
                  <h2 class="text-2xl font-bold text-violet-400 glowing-text">DESCANSO TOTAL</h2>
-                 <p class="text-slate-400 mt-2 mb-6">A recuperação é tão crucial quanto o treino.</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                 <p class="text-slate-400 mt-2 mb-6">Recuperação e crescimento. Não negligencie o sono.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                     <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                        <h3 class="font-bold text-lg text-slate-200">Atividade</h3>
-                        <p class="text-slate-400">Mínima. Priorize o sono de qualidade.</p>
+                        <h3 class="font-bold text-lg text-slate-200">Atividade Mínima</h3>
+                        <p class="text-slate-400">Seu corpo precisa de repouso para reconstruir as fibras musculares.</p>
                     </div>
                     <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                        <h3 class="font-bold text-lg text-slate-200">Hidratação</h3>
-                        <p class="text-slate-400">Beba bastante água durante o dia.</p>
-                    </div>
-                     <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                        <h3 class="font-bold text-lg text-slate-200">Preparação</h3>
-                        <p class="text-slate-400">Prepare suas refeições. O sucesso da próxima semana começa agora.</p>
+                        <h3 class="font-bold text-lg text-slate-200">Preparação Mental e Nutricional</h3>
+                        <p class="text-slate-400">Hidrate-se, coma suas refeições e prepare-se para a próxima semana.</p>
                     </div>
                 </div>
             </div>
@@ -257,7 +359,7 @@
         
         <section class="mt-12 day-content p-6 rounded-2xl shadow-lg">
             <div class="mb-6 text-center">
-                <h2 class="text-2xl font-bold text-violet-400 glowing-text">DISTRIBUIÇÃO DE VOLUME SEMANAL</h2>
+                <h2 class="text-2xl font-bold text-violet-400 glowing-text">VOLUME SEMANAL DE ESPECIALIZAÇÃO</h2>
                 <p class="text-slate-400 mt-2">Gráfico de volume de treino (total de séries) para cada dia.</p>
             </div>
             <div class="chart-container">
@@ -274,20 +376,15 @@
             const allInputs = document.querySelectorAll('input[type="number"]');
 
             function generateInputKey(input) {
-                const row = input.closest('tr');
-                const table = input.closest('table');
+                const card = input.closest('.exercise-card');
                 const dayDiv = input.closest('.day-content');
-                if (!row || !table || !dayDiv) return null;
+                if (!card || !dayDiv) return null;
 
                 const dayId = dayDiv.id;
-                const rowIndex = Array.from(table.querySelectorAll('tbody tr')).indexOf(row);
+                const exerciseIndex = card.dataset.exerciseIndex;
+                const inputType = input.dataset.type;
                 
-                const isMobile = window.innerWidth < 640;
-                let cellIndex = input.closest('td').cellIndex;
-                
-                const isCarga = isMobile ? cellIndex === 2 : cellIndex === 3;
-                
-                return `workoutDataFuturistic-${dayId}-r${rowIndex}-${isCarga ? 'carga' : 'reps'}`;
+                return `workoutDataSpecialization-${dayId}-e${exerciseIndex}-${inputType}`;
             }
 
             function saveDataToLocalStorage(key, value) {
@@ -323,8 +420,23 @@
                     div.classList.add('hidden');
                 });
                 navButtons.forEach(btn => btn.classList.remove('active'));
-
-                const dayToShow = (dayIndex === 0 || dayIndex === 6) ? 6 : dayIndex;
+                
+                let dayToShow;
+                switch(dayIndex) {
+                    case 0: // Sunday
+                    case 6: // Saturday
+                        dayToShow = 6;
+                        break;
+                    case 1: // Monday
+                    case 2: // Tuesday
+                    case 4: // Thursday
+                    case 5: // Friday
+                        dayToShow = dayIndex;
+                        break;
+                    case 3: // Wednesday
+                        dayToShow = 3;
+                        break;
+                }
 
                 const activeContent = document.getElementById(`day-${dayToShow}`);
                 if (activeContent) {
@@ -355,10 +467,10 @@
             const volumeChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Segunda (Força)', 'Terça (Força)', 'Quinta (Hipertrofia)', 'Sexta (Hipertrofia)'],
+                    labels: ['Segunda (Tensão)', 'Terça (Tensão)', 'Quinta (Volume)', 'Sexta (Volume)'],
                     datasets: [{
                         label: 'Total de Séries por Treino',
-                        data: [17, 16, 22, 19],
+                        data: [21, 19, 23, 18],
                         backgroundColor: 'rgba(139, 92, 246, 0.6)',
                         borderColor: 'rgba(139, 92, 246, 1)',
                         borderWidth: 1,
