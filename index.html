@@ -3,457 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plano de Treino: Densidade Anabólica v2</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Meu Treino Upper/Lower</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
         body {
-            font-family: 'Rajdhani', sans-serif;
-            background: #0D0F18;
-            color: #E5E7EB;
-            overflow-x: hidden;
-        }
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-            max-width: 700px;
-            margin: auto;
-        }
-        @media (min-width: 640px) {
-            .chart-container {
-                height: 400px;
-            }
-        }
-        .nav-btn.active {
-            background-color: #8B5CF6;
-            color: #E0E7FF;
-            box-shadow: 0 0 15px 5px rgba(139, 92, 246, 0.4);
-        }
-        .nav-btn {
-            transition: all 0.3s ease;
-            border: 1px solid #374151;
-        }
-        .nav-btn:hover {
-            border-color: #8B5CF6;
-            color: #E0E7FF;
-        }
-
-        .day-content {
-            background: rgba(29, 32, 47, 0.6);
-            border: 1px solid #374151;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            animation: fadeIn 0.6s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        input[type="number"] {
-            -moz-appearance: textfield;
-            background-color: #1F2937;
-            border: 1px solid #4B5563;
-            color: #E5E7EB;
-            padding: 0.5rem;
-        }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
             margin: 0;
+            padding: 20px;
         }
-        input[type="number"]:focus {
-            outline: none;
-            border-color: #8B5CF6;
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.5);
+        h1 {
+            text-align: center;
+            color: #4CAF50;
         }
-
-        .glowing-text {
-            text-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
+        .day-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-
-        .animated-bg {
+        .day-container h2 {
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+        .exercise {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        .exercise:last-child {
+            border-bottom: none;
+        }
+        .exercise-name {
+            flex: 2;
+            font-weight: bold;
+        }
+        .inputs {
+            flex: 3;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        input[type="text"] {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #2c2c2c;
+            color: white;
+            text-align: center;
+        }
+        button {
+            display: block;
             width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            background: linear-gradient(315deg, rgba(139,92,246,0.1) 0%, rgba(13,15,24,0.1) 50%, rgba(139,92,246,0.1) 100%);
-            background-size: 400% 400%;
-            animation: gradient-animation 15s ease infinite;
-        }
-
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .tip-toggle {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            transition: color 0.2s;
+            margin-top: 20px;
+            transition: background-color 0.3s;
         }
-        .tip-toggle:hover {
-            color: #a78bfa;
+        button:hover {
+            background-color: #45a049;
         }
-        .tip-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        .tip-content.visible {
-            max-height: 100px; /* Adjust as needed */
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-        .timer-btn {
-            border: 1px solid #4B5563;
-            transition: all 0.2s ease;
-        }
-        .timer-btn:hover {
-            background-color: #374151;
-            border-color: #8B5CF6;
-        }
-        #timer-display.timer-finished {
-            animation: flash 0.5s 3;
-        }
-        @keyframes flash {
-            0%, 100% { color: #f87171; text-shadow: 0 0 10px #f87171; }
-            50% { color: #E5E7EB; text-shadow: none; }
+        .notification {
+            text-align: center;
+            color: #4CAF50;
+            font-weight: bold;
+            height: 20px;
+            margin-top: 10px;
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen">
-    <div class="animated-bg"></div>
+<body>
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8 relative z-10">
-        
-        <header class="text-center mb-6 relative">
-            <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-wider">PROTOCOLO DE TREINO</h1>
-            <p class="text-lg text-violet-400 font-semibold mt-1 glowing-text">DENSIDADE ANABÓLICA</p>
-            <div id="clock" class="absolute top-0 right-0 text-lg font-semibold text-slate-400 hidden sm:block"></div>
-        </header>
+    <h1>Progresso de Treino (4-6 Reps)</h1>
 
-        <section id="timer-section" class="day-content p-4 rounded-2xl shadow-lg mb-8">
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div id="timer-display" class="text-6xl font-bold tracking-widest text-white">02:00</div>
-                <div class="flex flex-wrap justify-center gap-2">
-                    <button class="timer-btn preset-btn text-xs font-semibold px-3 py-2 rounded-md" data-time="75">1:15</button>
-                    <button class="timer-btn preset-btn text-xs font-semibold px-3 py-2 rounded-md" data-time="90">1:30</button>
-                    <button class="timer-btn preset-btn text-xs font-semibold px-3 py-2 rounded-md" data-time="120">2:00</button>
-                    <button class="timer-btn preset-btn text-xs font-semibold px-3 py-2 rounded-md" data-time="180">3:00</button>
-                </div>
-                <div class="flex gap-2">
-                    <button id="start-pause-btn" class="timer-btn bg-violet-600/50 hover:bg-violet-500/50 border-violet-500 text-sm font-bold px-5 py-2 rounded-md">INICIAR</button>
-                    <button id="reset-btn" class="timer-btn text-sm font-semibold px-4 py-2 rounded-md">RESET</button>
-                </div>
-            </div>
-        </section>
+    <div id="workout-plan">
+        </div>
 
-        <nav class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
-            <button data-day="1" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Segunda</button>
-            <button data-day="2" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Terça</button>
-            <button data-day="3" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Quarta</button>
-            <button data-day="4" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Quinta</button>
-            <button data-day="5" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Sexta</button>
-            <button data-day="6" class="nav-btn px-5 py-2.5 text-sm sm:text-base font-semibold rounded-full bg-gray-800 text-slate-300">Fim de Semana</button>
-        </nav>
-
-        <main id="content-container">
-            
-            <div id="day-1" class="day-content hidden p-6 rounded-2xl shadow-lg">
-                <div class="mb-6 text-center">
-                    <h2 class="text-2xl font-bold text-violet-400 glowing-text">DIA 1: SUPERIOR - FORÇA DE PEITO & DENSIDADE DE BRAÇOS</h2>
-                </div>
-                <div class="space-y-4">
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0">
-                        <div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Supino Reto com Barra</h3><span class="tip-toggle text-xl">💡</span></div>
-                        <div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Pense em "dobrar a barra" com as mãos durante o movimento. Isso aumenta a ativação do peitoral.</p></div>
-                        <p class="text-sm text-slate-400 my-2">5 Séries x 4-6 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Supino Inclinado com Halteres</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Na descida, imagine que está afastando os halteres, alongando o máximo do peitoral superior.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 6-8 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Crucifixo Reto com Halteres</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Mantenha uma leve flexão nos cotovelos e foque em "abraçar uma árvore" para contrair o peito.</p></div><p class="text-sm text-slate-400 my-2">3 Séries x 8-12 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Rosca Direta com Barra</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Mantenha os cotovelos travados ao lado do corpo. Não use o balanço das costas para subir a carga.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 6-8 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Tríceps Testa com Barra W</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Controle a descida (fase excêntrica) por 3 segundos para maximizar a tensão no tríceps.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 6-8 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="5"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Remada Curvada com Halteres</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Puxe os halteres em direção ao seu quadril, não para cima. Isso ativa mais as dorsais.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 8-10 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="6"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Elevação Lateral na Polia</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Deixe o ego de lado. Use uma carga que você consiga controlar, sem balançar o corpo, para isolar o deltoide medial.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 10-15 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="7"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Rosca Martelo Alternada</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Suba o peso de forma controlada e desça mais devagar ainda para aumentar a tensão no músculo braquial.</p></div><p class="text-sm text-slate-400 my-2">3 Séries x 8-10 (cada)</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="8"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Tríceps Coice na Polia</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Pause por 1 segundo no final do movimento, com o braço totalmente estendido, para um pico de contração no tríceps.</p></div><p class="text-sm text-slate-400 my-2">3 Séries x 10-15 (cada)</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                </div>
-            </div>
-
-            <div id="day-2" class="day-content hidden p-6 rounded-2xl shadow-lg">
-                <div class="mb-6 text-center"><h2 class="text-2xl font-bold text-violet-400 glowing-text">DIA 2: INFERIOR - FORÇA DE QUADRÍCEPS & GLÚTEOS</h2></div>
-                <div class="space-y-4">
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Agachamento Livre</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Mantenha o abdômen contraído como se fosse levar um soco. Isso estabiliza sua coluna e aumenta sua força.</p></div><p class="text-sm text-slate-400 my-2">5 Séries x 4-6 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Leg Press 45º</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Não estenda completamente os joelhos no final do movimento para manter a tensão constante no quadríceps.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 6-8 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Afundo no Smith ou com Halteres</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Incline levemente o tronco à frente para aumentar a ativação do glúteo da perna da frente.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 8-10 (cada)</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Elevação Pélvica (Hip Thrust)</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Pause por 2 segundos no topo, esmagando os glúteos com força máxima. A qualidade da contração é tudo aqui.</p></div><p class="text-sm text-slate-400 my-2">5 Séries x 6-8 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Cadeira Extensora</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Segure por 1 segundo no pico de contração em cada repetição para maximizar o "rasgo" no quadríceps.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 10-15 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="5"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Mesa Flexora</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Foque em uma fase excêntrica (a volta do movimento) lenta e controlada, sentindo o posterior de coxa "frear" o peso.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 10-15 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="6"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Panturrilha Sentado</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Pause tanto no topo (contração máxima) quanto na base (alongamento máximo) do movimento por 1 segundo.</p></div><p class="text-sm text-slate-400 my-2">6 Séries x 10-15 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                </div>
-            </div>
-
-            <div id="day-3" class="day-content hidden p-6 rounded-2xl shadow-lg text-center"><h2 class="text-2xl font-bold text-violet-400 glowing-text">DESCANSO TOTAL / ATIVO</h2><p class="text-slate-400 mt-2 mb-6">Recuperação é crucial. Ouça seu corpo.</p><div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left"><div class="bg-gray-800 p-4 rounded-lg border border-gray-700"><h3 class="font-bold text-lg text-slate-200">Atividade</h3><p class="text-slate-400">Se sentir-se disposto, caminhada leve. Caso contrário, descanso total.</p></div><div class="bg-gray-800 p-4 rounded-lg border border-gray-700"><h3 class="font-bold text-lg text-slate-200">Nutrição</h3><p class="text-slate-400">Mantenha as calorias e proteínas altas. O crescimento acontece agora.</p></div></div></div>
-
-            <div id="day-4" class="day-content hidden p-6 rounded-2xl shadow-lg">
-                <div class="mb-6 text-center"><h2 class="text-2xl font-bold text-violet-400 glowing-text">DIA 3: SUPERIOR - DENSIDADE DE PEITO & BRAÇOS</h2></div>
-                <div class="space-y-4">
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Supino Fechado</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Mantenha os cotovelos próximos ao corpo para maximizar o trabalho no tríceps e na parte interna do peitoral.</p></div><p class="text-sm text-slate-400 my-2">5 Séries x 6-8 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Supino Inclinado na Máquina</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Ajuste o banco para que a pegada fique na altura da parte superior do seu peito. Foque em esmagar o músculo.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 8-10 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Voador (Peck Deck)</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Não deixe as mãos passarem da linha dos ombros na volta para manter a tensão no peitoral.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 10-12 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Crossover Polia Média</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Foque em esmagar o miolo do peitoral, mantendo a contração por 1 segundo no final do movimento.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 10-12 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Rosca Scott na Máquina</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Mantenha o tríceps colado no apoio. O movimento é apenas do antebraço para isolar o bíceps.</p></div><p class="text-sm text-slate-400 my-2">5 Séries x 8-10 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="5"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Tríceps Francês Unilateral com Halter</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Use a outra mão para dar suporte ao cotovelo, garantindo que ele não se mova durante o exercício.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 8-10 (cada)</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="6"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Rosca na Polia Baixa (Inclinado)</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Use um banco inclinado em frente à polia. Deixe o braço estender completamente para trás, alongando a cabeça longa do bíceps.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 8-10 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="7"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Bíceps na Polia (cotovelo atrás)</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Mantenha o cotovelo fixo para trás e puxe a alça para frente, focando no alongamento máximo do bíceps.</p></div><p class="text-sm text-slate-400 my-2">3 Séries x 12-15 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="8"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Tríceps na Polia com Barra Reta</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Dê um passo para trás em relação à polia para manter a tensão no tríceps durante todo o movimento.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 10-12 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="9"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Rosca Concentrada</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Foque em girar o mindinho para cima no final da subida (supinação) para um pico de contração máximo.</p></div><p class="text-sm text-slate-400 my-2">3 Séries x 8-10 (cada)</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                </div>
-            </div>
-
-            <div id="day-5" class="day-content hidden p-6 rounded-2xl shadow-lg">
-                <div class="mb-6 text-center"><h2 class="text-2xl font-bold text-violet-400 glowing-text">DIA 4: INFERIOR - FORÇA DE POSTERIORES & DENSIDADE DE GLÚTEOS</h2></div>
-                 <div class="space-y-4">
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="0"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Levantamento Terra Romeno c/ Halteres</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Pense em "empurrar o chão" com os pés para subir, usando a força dos glúteos e posteriores, não da lombar.</p></div><p class="text-sm text-slate-400 my-2">5 Séries x 8-10 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="1"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Cadeira Abdutora</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Incline seu tronco para frente para focar mais no glúteo máximo. Segure a contração por 2 segundos.</p></div><p class="text-sm text-slate-400 my-2">5 Séries x 10-15 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="2"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Afundo Búlgaro</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Controle a descida (excêntrica) lentamente para maximizar o dano muscular no glúteo.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 8-10 (cada)</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="3"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Stiff com Barra</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Mantenha a barra colada nas pernas e a coluna perfeitamente reta durante todo o movimento.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 8-10 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="4"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Cadeira Flexora</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Foque em puxar o peso com os calcanhares, não com a ponta dos pés, para ativar melhor os posteriores.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 10-12 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="5"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Coice na Polia Baixa</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Evite arquear a lombar. O movimento deve ser concentrado apenas na extensão do quadril para isolar o glúteo.</p></div><p class="text-sm text-slate-400 my-2">4 Séries x 12-15 (cada)</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                    <div class="exercise-card bg-gray-800 p-4 rounded-lg border border-gray-700" data-exercise-index="6"><div class="flex justify-between items-center"><h3 class="font-bold text-lg text-slate-200">Panturrilha no Leg Press</h3><span class="tip-toggle text-xl">💡</span></div><div class="tip-content text-sm text-slate-400 italic bg-black/20 p-2 rounded-md mt-2"><p>Dica: Use apenas a ponta dos pés na plataforma para garantir amplitude máxima no movimento.</p></div><p class="text-sm text-slate-400 my-2">6 Séries x 10-15 Reps</p><div class="flex gap-4"><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Carga (kg)</label><input type="number" data-type="carga" class="w-full rounded-md text-center"></div><div class="w-1/2"><label class="text-xs text-slate-500 block mb-1">Reps Feitas</label><input type="number" data-type="reps" class="w-full rounded-md text-center"></div></div></div>
-                </div>
-            </div>
-
-            <div id="day-6" class="day-content hidden p-6 rounded-2xl shadow-lg text-center"><h2 class="text-2xl font-bold text-violet-400 glowing-text">DESCANSO TOTAL</h2><p class="text-slate-400 mt-2 mb-6">Recuperação e crescimento. Não negligencie o sono.</p><div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left"><div class="bg-gray-800 p-4 rounded-lg border border-gray-700"><h3 class="font-bold text-lg text-slate-200">Atividade Mínima</h3><p class="text-slate-400">Seu corpo precisa de repouso para reconstruir as fibras musculares.</p></div><div class="bg-gray-800 p-4 rounded-lg border border-gray-700"><h3 class="font-bold text-lg text-slate-200">Preparação Mental e Nutricional</h3><p class="text-slate-400">Hidrate-se, coma suas refeições e prepare-se para a próxima semana.</p></div></div></div>
-        </main>
-        
-        <section class="mt-12 day-content p-6 rounded-2xl shadow-lg">
-            <div class="mb-6 text-center">
-                <h2 class="text-2xl font-bold text-violet-400 glowing-text">VOLUME SEMANAL DE DENSIDADE</h2>
-                <p class="text-slate-400 mt-2">Gráfico de volume de treino (total de séries) para cada dia.</p>
-            </div>
-            <div class="chart-container">
-                <canvas id="volumeChart"></canvas>
-            </div>
-        </section>
-
-    </div>
+    <button onclick="saveData()">💾 Salvar Meus Pesos e Descansos</button>
+    <div id="notification" class="notification"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const contentDivs = document.querySelectorAll('.day-content');
-            const allInputs = document.querySelectorAll('input[type="number"]');
-            const tipToggles = document.querySelectorAll('.tip-toggle');
-
-            // Clock
-            const clockElement = document.getElementById('clock');
-            function updateClock() {
-                if (clockElement) {
-                    clockElement.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                }
+        // Estrutura do treino baseada na sua planilha
+        const workoutPlan = [
+            {
+                day: "Segunda-Feira (Superior A)",
+                exercises: [
+                    "Supino Reto com Barra (Peito)",
+                    "Remada Curvada (Costas)",
+                    "Desenvolvimento Halteres (Ombro)",
+                    "Rosca Direta + Tríceps Testa (Braços)"
+                ]
+            },
+            {
+                day: "Terça-Feira (Inferior A)",
+                exercises: [
+                    "Agachamento Livre (Quadríceps/Glúteo)",
+                    "Stiff (Posterior)",
+                    "Elevação Pélvica (Glúteo)",
+                    "Gêmeos em Pé (Panturrilha)"
+                ]
+            },
+            {
+                day: "Quinta-Feira (Superior B)",
+                exercises: [
+                    "Puxada Alta (Costas)",
+                    "Supino Inclinado (Peito)",
+                    "Elevação Lateral (Ombros)",
+                    "Tríceps Pulley + Rosca Martelo (Braços)"
+                ]
+            },
+            {
+                day: "Sexta-Feira (Inferior B)",
+                exercises: [
+                    "Levantamento Terra Sumô (Posterior/Glúteo)",
+                    "Leg Press 45° (Quadríceps)",
+                    "Cadeira Abdutora (Glúteos)",
+                    "Gêmeos Sentado (Panturrilha)"
+                ]
+            },
+            {
+                day: "Sábado (Isolados - Peito e Glúteos)",
+                exercises: [
+                    "Crucifixo Reto com Halteres (Peito)",
+                    "Crossover na Polia (Peito)",
+                    "Glúteo na Polia / Coice (Glúteo)",
+                    "Elevação Pélvica Unilateral (Glúteo)"
+                ]
             }
-            updateClock();
-            setInterval(updateClock, 1000);
+        ];
 
-            // Timer
-            const timerDisplay = document.getElementById('timer-display');
-            const startPauseBtn = document.getElementById('start-pause-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const presetBtns = document.querySelectorAll('.preset-btn');
-            let countdown;
-            let timeLeft;
-            let initialTime = 120; // 2 minutes default
-            let isRunning = false;
-            let audioContext;
+        const container = document.getElementById('workout-plan');
 
-            function playBeep() {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
-                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1);
-                oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.5);
-            }
-
-            function updateDisplay() {
-                const minutes = Math.floor(timeLeft / 60);
-                let seconds = timeLeft % 60;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-                timerDisplay.textContent = `${minutes}:${seconds}`;
-            }
-
-            function startTimer() {
-                isRunning = true;
-                startPauseBtn.textContent = 'PAUSAR';
-                countdown = setInterval(() => {
-                    timeLeft--;
-                    updateDisplay();
-                    if (timeLeft <= 0) {
-                        clearInterval(countdown);
-                        playBeep();
-                        timerDisplay.classList.add('timer-finished');
-                        setTimeout(() => timerDisplay.classList.remove('timer-finished'), 1500);
-                        resetTimer(true);
-                    }
-                }, 1000);
-            }
-
-            function pauseTimer() {
-                clearInterval(countdown);
-                isRunning = false;
-                startPauseBtn.textContent = 'INICIAR';
-            }
-
-            function resetTimer(isFinished = false) {
-                clearInterval(countdown);
-                isRunning = false;
-                startPauseBtn.textContent = 'INICIAR';
-                timeLeft = initialTime;
-                updateDisplay();
-                if (!isFinished) {
-                   timerDisplay.classList.remove('timer-finished');
-                }
-            }
-
-            startPauseBtn.addEventListener('click', () => {
-                if (audioContext && audioContext.state === 'suspended') {
-                    audioContext.resume();
-                }
-                isRunning ? pauseTimer() : startTimer();
-            });
-
-            resetBtn.addEventListener('click', () => resetTimer());
-
-            presetBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    initialTime = parseInt(btn.dataset.time);
-                    resetTimer();
-                });
-            });
-
-            // Tips
-            tipToggles.forEach(toggle => {
-                toggle.addEventListener('click', () => {
-                    const content = toggle.parentElement.nextElementSibling;
-                    content.classList.toggle('visible');
-                });
-            });
-
-            // Local Storage & Navigation
-            function generateInputKey(input) {
-                const card = input.closest('.exercise-card');
-                const dayDiv = input.closest('.day-content');
-                if (!card || !dayDiv) return null;
-                const dayId = dayDiv.id;
-                const exerciseIndex = card.dataset.exerciseIndex;
-                const inputType = input.dataset.type;
-                return `workoutDataDensityV2-${dayId}-e${exerciseIndex}-${inputType}`;
-            }
-
-            function saveDataToLocalStorage(key, value) {
-                localStorage.setItem(key, value);
-            }
-
-            function loadDataFromLocalStorage() {
-                allInputs.forEach(input => {
-                    const key = generateInputKey(input);
-                    if (key) {
-                        const savedValue = localStorage.getItem(key);
-                        if (savedValue !== null) {
-                            input.value = savedValue;
-                        }
-                    }
-                });
-            }
-
-            allInputs.forEach(input => {
-                input.addEventListener('input', () => {
-                    const key = generateInputKey(input);
-                    if (key) saveDataToLocalStorage(key, input.value);
-                });
-            });
-            
-            function showDay(dayIndex, isInitialLoad = false) {
-                contentDivs.forEach(div => {
-                    if(!isInitialLoad) div.style.animation = 'none';
-                    div.classList.add('hidden');
-                });
-                navButtons.forEach(btn => btn.classList.remove('active'));
+        // Função para gerar o HTML do treino
+        function renderWorkout() {
+            workoutPlan.forEach((workout, dayIndex) => {
+                let dayDiv = document.createElement('div');
+                dayDiv.className = 'day-container';
                 
-                let dayToShow;
-                switch(dayIndex) {
-                    case 0: case 6: dayToShow = 6; break;
-                    case 1: case 2: case 4: case 5: dayToShow = dayIndex; break;
-                    case 3: dayToShow = 3; break;
-                }
+                let title = document.createElement('h2');
+                title.innerText = workout.day;
+                dayDiv.appendChild(title);
 
-                const activeContent = document.getElementById(`day-${dayToShow}`);
-                if (activeContent) {
-                    if (!isInitialLoad) activeContent.style.animation = 'fadeIn 0.6s ease-out';
-                    activeContent.classList.remove('hidden');
-                }
+                workout.exercises.forEach((exercise, exIndex) => {
+                    let exDiv = document.createElement('div');
+                    exDiv.className = 'exercise';
+                    
+                    let idPrefix = `day${dayIndex}_ex${exIndex}`;
+                    
+                    exDiv.innerHTML = `
+                        <div class="exercise-name">${exercise} <br><small>4 séries | 4-6 reps</small></div>
+                        <div class="inputs">
+                            <input type="text" id="${idPrefix}_weight" placeholder="Ex: 50kg" title="Carga">
+                            <input type="text" id="${idPrefix}_rest" placeholder="Ex: 2 min" title="Descanso">
+                        </div>
+                    `;
+                    dayDiv.appendChild(exDiv);
+                });
+                container.appendChild(dayDiv);
+            });
+            loadData();
+        }
 
-                const activeButton = document.querySelector(`.nav-btn[data-day="${dayToShow}"]`);
-                if (activeButton) activeButton.classList.add('active');
-            }
-            
-            navButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const day = button.getAttribute('data-day');
-                    showDay(parseInt(day, 10));
+        // Função para salvar os dados na "memória" do navegador (localStorage)
+        function saveData() {
+            workoutPlan.forEach((workout, dayIndex) => {
+                workout.exercises.forEach((exercise, exIndex) => {
+                    let idPrefix = `day${dayIndex}_ex${exIndex}`;
+                    let weight = document.getElementById(`${idPrefix}_weight`).value;
+                    let rest = document.getElementById(`${idPrefix}_rest`).value;
+                    
+                    localStorage.setItem(`${idPrefix}_weight`, weight);
+                    localStorage.setItem(`${idPrefix}_rest`, rest);
                 });
             });
+            
+            const notif = document.getElementById('notification');
+            notif.innerText = "Treino salvo com sucesso! 💪";
+            setTimeout(() => { notif.innerText = ""; }, 3000);
+        }
 
-            const today = new Date().getDay();
-            showDay(today, true);
-            loadDataFromLocalStorage();
-            updateDisplay();
-
-            // Chart
-            const ctx = document.getElementById('volumeChart').getContext('2d');
-            const volumeChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Segunda (Superior)', 'Terça (Inferior)', 'Quinta (Superior)', 'Sexta (Inferior)'],
-                    datasets: [{
-                        label: 'Total de Séries por Treino',
-                        data: [34, 32, 40, 32], 
-                        backgroundColor: 'rgba(139, 92, 246, 0.6)',
-                        borderColor: 'rgba(139, 92, 246, 1)',
-                        borderWidth: 1,
-                        borderRadius: 8,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false },
-                        tooltip: { backgroundColor: '#1F2937', titleColor: '#E5E7EB', bodyColor: '#E5E7EB', padding: 10, cornerRadius: 6, borderColor: '#8B5CF6', borderWidth: 1 }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, grid: { color: '#374151' }, ticks: { color: '#9CA3AF' }},
-                        x: { grid: { display: false }, ticks: { color: '#9CA3AF', font: { size: 10 }}}
-                    }
-                }
+        // Função para carregar os dados salvos quando a página abre
+        function loadData() {
+            workoutPlan.forEach((workout, dayIndex) => {
+                workout.exercises.forEach((exercise, exIndex) => {
+                    let idPrefix = `day${dayIndex}_ex${exIndex}`;
+                    
+                    let savedWeight = localStorage.getItem(`${idPrefix}_weight`);
+                    let savedRest = localStorage.getItem(`${idPrefix}_rest`);
+                    
+                    if (savedWeight) document.getElementById(`${idPrefix}_weight`).value = savedWeight;
+                    if (savedRest) document.getElementById(`${idPrefix}_rest`).value = savedRest;
+                });
             });
-        });
-    </script>
+        }
 
+        // Inicializa o app
+        renderWorkout();
+    </script>
 </body>
 </html>
-
-
