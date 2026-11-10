@@ -3,213 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Treino Upper/Lower</title>
+    <title>Hypertrophy Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        neon: {
+                            green: '#10b981', // Emerald 500
+                            glow: 'rgba(16, 185, 129, 0.4)'
+                        },
+                        dark: {
+                            bg: '#0f172a',    // Slate 900
+                            card: '#1e293b',  // Slate 800
+                            border: '#334155' // Slate 700
+                        }
+                    },
+                    boxShadow: {
+                        'neon': '0 0 10px rgba(16, 185, 129, 0.5)',
+                        'neon-strong': '0 0 20px rgba(16, 185, 129, 0.8)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: #0f172a;
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Hide scrollbar for horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Custom input number styles */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
             margin: 0;
-            padding: 20px;
         }
-        h1 {
-            text-align: center;
-            color: #4CAF50;
+        input[type="number"] {
+            -moz-appearance: textfield;
         }
-        .day-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+
+        /* Toast Animation */
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        .day-container h2 {
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 5px;
-            margin-top: 0;
-        }
-        .exercise {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #333;
-        }
-        .exercise:last-child {
-            border-bottom: none;
-        }
-        .exercise-name {
-            flex: 2;
-            font-weight: bold;
-        }
-        .inputs {
-            flex: 3;
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-        input[type="text"] {
-            width: 80px;
-            padding: 5px;
-            border: 1px solid #555;
-            border-radius: 4px;
-            background-color: #2c2c2c;
-            color: white;
-            text-align: center;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .notification {
-            text-align: center;
-            color: #4CAF50;
-            font-weight: bold;
-            height: 20px;
-            margin-top: 10px;
+        .toast-enter {
+            animation: slideUp 0.3s ease-out forwards;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col font-sans pb-20">
 
-    <h1>Progresso de Treino (4-6 Reps)</h1>
-
-    <div id="workout-plan">
+    <!-- Header -->
+    <header class="pt-8 pb-4 px-6 sticky top-0 bg-dark-bg/90 backdrop-blur-md z-10 border-b border-dark-border">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
+                    EvoTrack
+                </h1>
+                <p class="text-sm text-slate-400">Plano de Hipertrofia</p>
+            </div>
+            <div id="auth-status" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-600">
+                <i class="ph ph-user text-slate-400"></i>
+            </div>
         </div>
 
-    <button onclick="saveData()">💾 Salvar Meus Pesos e Descansos</button>
-    <div id="notification" class="notification"></div>
+        <!-- Days Navigation -->
+        <nav class="flex overflow-x-auto no-scrollbar gap-3 pb-2" id="days-nav">
+            <!-- Days will be injected here by JS -->
+        </nav>
+    </header>
 
-    <script>
-        // Estrutura do treino baseada na sua planilha
-        const workoutPlan = [
-            {
-                day: "Segunda-Feira (Superior A)",
-                exercises: [
-                    "Supino Reto com Barra (Peito)",
-                    "Remada Curvada (Costas)",
-                    "Desenvolvimento Halteres (Ombro)",
-                    "Rosca Direta + Tríceps Testa (Braços)"
-                ]
-            },
-            {
-                day: "Terça-Feira (Inferior A)",
-                exercises: [
-                    "Agachamento Livre (Quadríceps/Glúteo)",
-                    "Stiff (Posterior)",
-                    "Elevação Pélvica (Glúteo)",
-                    "Gêmeos em Pé (Panturrilha)"
-                ]
-            },
-            {
-                day: "Quinta-Feira (Superior B)",
-                exercises: [
-                    "Puxada Alta (Costas)",
-                    "Supino Inclinado (Peito)",
-                    "Elevação Lateral (Ombros)",
-                    "Tríceps Pulley + Rosca Martelo (Braços)"
-                ]
-            },
-            {
-                day: "Sexta-Feira (Inferior B)",
-                exercises: [
-                    "Levantamento Terra Sumô (Posterior/Glúteo)",
-                    "Leg Press 45° (Quadríceps)",
-                    "Cadeira Abdutora (Glúteos)",
-                    "Gêmeos Sentado (Panturrilha)"
-                ]
-            },
-            {
-                day: "Sábado (Isolados - Peito e Glúteos)",
-                exercises: [
-                    "Crucifixo Reto com Halteres (Peito)",
-                    "Crossover na Polia (Peito)",
-                    "Glúteo na Polia / Coice (Glúteo)",
-                    "Elevação Pélvica Unilateral (Glúteo)"
-                ]
+    <!-- Main Content (Workout List) -->
+    <main class="flex-1 px-4 pt-6 pb-12 w-full max-w-2xl mx-auto flex flex-col gap-4" id="workout-container">
+        <!-- Exercises will be injected here -->
+        <div class="flex justify-center items-center h-32">
+            <i class="ph ph-spinner-gap animate-spin text-3xl text-emerald-500"></i>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none">
+    </div>
+
+    <!-- Firebase & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Environment Variables Configuration
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'hypertrophy-tracker-v1';
+        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        let firebaseConfig = null;
+        
+        if (firebaseConfigStr) {
+            try {
+                firebaseConfig = JSON.parse(firebaseConfigStr);
+            } catch (e) {
+                console.error("Error parsing firebase config", e);
             }
+        }
+
+        // --- Workout Plan Data Structure ---
+        const workoutPlan = [
+            { id: 0, name: 'Dom', fullName: 'Domingo', title: 'Descanso', exercises: [] },
+            { id: 1, name: 'Seg', fullName: 'Segunda', title: 'Push (Peito, Ombro, Tríceps)', exercises: [
+                { id: 'seg-1', name: 'Supino inclinado c/ halteres', reps: '4x 6-8' },
+                { id: 'seg-2', name: 'Desenvolvimento ombros', reps: '4x 6-8' },
+                { id: 'seg-3', name: 'Crucifixo máquina (peck deck)', reps: '4x 8-10' },
+                { id: 'seg-4', name: 'Crossover na polia', reps: '3x 8-10' },
+                { id: 'seg-5', name: 'Elevação lateral com halteres', reps: '4x 8-10' },
+                { id: 'seg-6', name: 'Tríceps na polia com corda', reps: '4x 8-10' }
+            ]},
+            { id: 2, name: 'Ter', fullName: 'Terça', title: 'Lower 1 (Foco Anterior)', exercises: [
+                { id: 'ter-1', name: 'Agachamento', reps: '4x 5-8' },
+                { id: 'ter-2', name: 'Leg press 45°', reps: '4x 6-8' },
+                { id: 'ter-3', name: 'Afundo / Passada', reps: '3x 8-10' },
+                { id: 'ter-4', name: 'Cadeira extensora', reps: '4x 8-10' },
+                { id: 'ter-5', name: 'Cadeira adutora', reps: '3x 10-12' },
+                { id: 'ter-6', name: 'Panturrilha em pé', reps: '4x 8-10' }
+            ]},
+            { id: 3, name: 'Qua', fullName: 'Quarta', title: 'Pull (Costas, Bíceps)', exercises: [
+                { id: 'qua-1', name: 'Puxada alta na polia pronada', reps: '4x 6-8' },
+                { id: 'qua-2', name: 'Remada baixa', reps: '4x 6-8' },
+                { id: 'qua-3', name: 'Remada unilateral com halter', reps: '3x 6-8' },
+                { id: 'qua-4', name: 'Crucifixo invertido', reps: '3x 10' },
+                { id: 'qua-5', name: 'Rosca Scott', reps: '4x 8-10' },
+                { id: 'qua-6', name: 'Rosca com halteres', reps: '3x 8-10' }
+            ]},
+            { id: 4, name: 'Qui', fullName: 'Quinta', title: 'Descanso', exercises: [] },
+            { id: 5, name: 'Sex', fullName: 'Sexta', title: 'Upper (Tronco)', exercises: [
+                { id: 'sex-1', name: 'Remada com apoio no banco', reps: '4x 6-8' },
+                { id: 'sex-2', name: 'Supino reto', reps: '4x 6-8' },
+                { id: 'sex-3', name: 'Puxada alta na polia supinada', reps: '3x 8-10' },
+                { id: 'sex-4', name: 'Elevação lateral polia', reps: '4x 8-10' },
+                { id: 'sex-5', name: 'Tríceps francês na polia', reps: '3x 8-10' },
+                { id: 'sex-6', name: 'Rosca de bíceps corda', reps: '3x 8-10' }
+            ]},
+            { id: 6, name: 'Sáb', fullName: 'Sábado', title: 'Lower 2 (Foco Posterior)', exercises: [
+                { id: 'sab-1', name: 'RDL com halteres', reps: '4x 6-8' },
+                { id: 'sab-2', name: 'Cadeira flexora', reps: '4x 8-10' },
+                { id: 'sab-3', name: 'Elevação pélvica', reps: '4x 6-8' },
+                { id: 'sab-4', name: 'Cadeira abdutora', reps: '3x 10-12' },
+                { id: 'sab-5', name: 'Panturrilha sentado', reps: '4x 8-10' }
+            ]}
         ];
 
-        const container = document.getElementById('workout-plan');
+        // --- Application State ---
+        let currentDayId = new Date().getDay(); // 0-6 (Sun-Sat)
+        let activeUserId = null;
+        let db = null;
+        let exerciseLoads = {}; // In-memory store: { 'seg-1': '20', ... }
 
-        // Função para gerar o HTML do treino
-        function renderWorkout() {
-            workoutPlan.forEach((workout, dayIndex) => {
-                let dayDiv = document.createElement('div');
-                dayDiv.className = 'day-container';
-                
-                let title = document.createElement('h2');
-                title.innerText = workout.day;
-                dayDiv.appendChild(title);
+        // --- DOM Elements ---
+        const daysNavEl = document.getElementById('days-nav');
+        const workoutContainerEl = document.getElementById('workout-container');
+        const authStatusEl = document.getElementById('auth-status');
+        const toastContainer = document.getElementById('toast-container');
 
-                workout.exercises.forEach((exercise, exIndex) => {
-                    let exDiv = document.createElement('div');
-                    exDiv.className = 'exercise';
-                    
-                    let idPrefix = `day${dayIndex}_ex${exIndex}`;
-                    
-                    exDiv.innerHTML = `
-                        <div class="exercise-name">${exercise} <br><small>4 séries | 4-6 reps</small></div>
-                        <div class="inputs">
-                            <input type="text" id="${idPrefix}_weight" placeholder="Ex: 50kg" title="Carga">
-                            <input type="text" id="${idPrefix}_rest" placeholder="Ex: 2 min" title="Descanso">
-                        </div>
-                    `;
-                    dayDiv.appendChild(exDiv);
-                });
-                container.appendChild(dayDiv);
-            });
-            loadData();
-        }
+        // --- Core Functions ---
 
-        // Função para salvar os dados na "memória" do navegador (localStorage)
-        function saveData() {
-            workoutPlan.forEach((workout, dayIndex) => {
-                workout.exercises.forEach((exercise, exIndex) => {
-                    let idPrefix = `day${dayIndex}_ex${exIndex}`;
-                    let weight = document.getElementById(`${idPrefix}_weight`).value;
-                    let rest = document.getElementById(`${idPrefix}_rest`).value;
-                    
-                    localStorage.setItem(`${idPrefix}_weight`, weight);
-                    localStorage.setItem(`${idPrefix}_rest`, rest);
-                });
-            });
+        // 1. Render Days Navigation
+        function renderDaysNavigation() {
+            daysNavEl.innerHTML = '';
             
-            const notif = document.getElementById('notification');
-            notif.innerText = "Treino salvo com sucesso! 💪";
-            setTimeout(() => { notif.innerText = ""; }, 3000);
-        }
+            // Reorder days starting from Monday for better UX, but keep IDs 0-6 standard
+            const displayOrder = [1, 2, 3, 4, 5, 6, 0]; 
+            
+            displayOrder.forEach(dayId => {
+                const dayData = workoutPlan.find(d => d.id === dayId);
+                const isActive = dayId === currentDayId;
+                
+                const btn = document.createElement('button');
+                btn.className = `flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    isActive 
+                    ? 'bg-emerald-500 text-white shadow-neon' 
+                    : 'bg-dark-card text-slate-400 hover:bg-slate-700'
+                }`;
+                btn.textContent = dayData.name;
+                btn.onclick = () => {
+                    currentDayId = dayId;
+                    renderDaysNavigation(); // Update active states
+                    renderWorkoutList();    // Update content
+                };
+                daysNavEl.appendChild(btn);
 
-        // Função para carregar os dados salvos quando a página abre
-        function loadData() {
-            workoutPlan.forEach((workout, dayIndex) => {
-                workout.exercises.forEach((exercise, exIndex) => {
-                    let idPrefix = `day${dayIndex}_ex${exIndex}`;
-                    
-                    let savedWeight = localStorage.getItem(`${idPrefix}_weight`);
-                    let savedRest = localStorage.getItem(`${idPrefix}_rest`);
-                    
-                    if (savedWeight) document.getElementById(`${idPrefix}_weight`).value = savedWeight;
-                    if (savedRest) document.getElementById(`${idPrefix}_rest`).value = savedRest;
-                });
+                // Auto-scroll to active day
+                if (isActive) {
+                    setTimeout(() => {
+                        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }, 100);
+                }
             });
         }
 
-        // Inicializa o app
-        renderWorkout();
+        // 2. Render Workout List
+        function renderWorkoutList() {
+            workoutContainerEl.innerHTML = '';
+            const dayData = workoutPlan.find(d => d.id === currentDayId);
+
+            // Day Title
+            const titleHtml = `
+                <div class="mb-4 text-center">
+                    <h2 class="text-xl font-bold text-slate-200">${dayData.fullName}</h2>
+                    <p class="text-emerald-400 text-sm font-medium">${dayData.title}</p>
+                </div>
+            `;
+            workoutContainerEl.insertAdjacentHTML('beforeend', titleHtml);
+
+            // Handle Rest Days
+            if (dayData.exercises.length === 0) {
+                const restHtml = `
+                    <div class="bg-dark-card rounded-2xl p-8 text-center border border-dark-border mt-4 flex flex-col items-center">
+                        <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-emerald-400">
+                            <i class="ph ph-coffee text-3xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-200">Dia de Descanso</h3>
+                        <p class="text-slate-400 mt-2 text-sm">Aproveite para recuperar a musculatura. A hipertrofia acontece no descanso!</p>
+                    </div>
+                `;
+                workoutContainerEl.insertAdjacentHTML('beforeend', restHtml);
+                return;
+            }
+
+            // Render Exercises
+            dayData.exercises.forEach((exercise, index) => {
+                const savedLoad = exerciseLoads[exercise.id] || null;
+                const loadDisplay = savedLoad !== null 
+                    ? `<div class="mt-2 text-xs font-medium text-emerald-400 flex items-center gap-1">
+                          <i class="ph-fill ph-check-circle"></i> Carga salva: ${savedLoad} kg
+                       </div>` 
+                    : `<div class="mt-2 text-xs font-medium text-slate-500">Nenhuma carga salva</div>`;
+
+                const exerciseCard = document.createElement('div');
+                exerciseCard.className = 'bg-dark-card p-4 rounded-xl border border-dark-border shadow-sm flex flex-col gap-3';
+                
+                exerciseCard.innerHTML = `
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex items-start gap-3">
+                            <div class="bg-slate-900 text-emerald-400 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 border border-slate-700">
+                                ${index + 1}
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-100 text-[15px] leading-snug">${exercise.name}</h3>
+                                <p class="text-slate-400 text-sm mt-1 flex items-center gap-1">
+                                    <i class="ph ph-arrows-clockwise"></i> ${exercise.reps}
+                                </p>
+                                <div id="load-display-${exercise.id}">${loadDisplay}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2 pt-3 border-t border-slate-700/50 flex gap-2 items-center">
+                        <div class="relative flex-1">
+                            <input type="number" 
+                                   id="input-${exercise.id}" 
+                                   placeholder="0" 
+                                   value="${savedLoad || ''}"
+                                   class="w-full bg-slate-900 border border-slate-600 rounded-lg py-2 pl-3 pr-8 text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors text-lg font-medium">
+                            <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm font-medium">kg</span>
+                        </div>
+                        <button onclick="window.handleSaveLoad('${exercise.id}')" 
+                                class="bg-slate-700 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-lg font-medium transition-all active:scale-95 flex items-center gap-2">
+                            <i class="ph ph-floppy-disk"></i> Salvar
+                        </button>
+                    </div>
+                `;
+                workoutContainerEl.appendChild(exerciseCard);
+            });
+        }
+
+        // 3. Save Load Function (Global Scope for inline onclick)
+        window.handleSaveLoad = async (exerciseId) => {
+            const inputEl = document.getElementById(`input-${exerciseId}`);
+            const weightValue = inputEl.value;
+
+            if (!weightValue || isNaN(weightValue)) {
+                showToast("Por favor, insira um valor válido.", 'error');
+                return;
+            }
+
+            if (!activeUserId || !db) {
+                showToast("Aguarde a conexão com o servidor.", 'error');
+                return;
+            }
+
+            try {
+                const docRef = doc(collection(db, 'artifacts', appId, 'users', activeUserId, 'exerciseLoads'), exerciseId);
+                await setDoc(docRef, { 
+                    weight: Number(weightValue),
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+                
+                // Optimistic UI update (will also be triggered by snapshot)
+                exerciseLoads[exerciseId] = Number(weightValue);
+                updateLoadDisplay(exerciseId);
+                
+                showToast("Carga salva com sucesso!");
+            } catch (error) {
+                console.error("Error saving load:", error);
+                showToast("Erro ao salvar carga.", 'error');
+            }
+        };
+
+        // 4. Update specific load display dynamically
+        function updateLoadDisplay(exerciseId) {
+            const displayEl = document.getElementById(`load-display-${exerciseId}`);
+            if (displayEl) {
+                const val = exerciseLoads[exerciseId];
+                displayEl.innerHTML = `
+                    <div class="mt-2 text-xs font-medium text-emerald-400 flex items-center gap-1">
+                        <i class="ph-fill ph-check-circle"></i> Carga salva: ${val} kg
+                    </div>
+                `;
+            }
+        }
+
+        // 5. Toast Notification System
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '<i class="ph-fill ph-check-circle text-lg"></i>' : '<i class="ph-fill ph-warning-circle text-lg"></i>';
+            const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
+            
+            toast.className = `toast-enter flex items-center gap-2 text-white px-4 py-3 rounded-xl shadow-lg ${bgColor} backdrop-blur-sm bg-opacity-90 min-w-max text-sm font-medium`;
+            toast.innerHTML = `${icon} ${message}`;
+            
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+
+        // --- Firebase Initialization & Authentication ---
+        
+        async function initializeAppWithAuth() {
+            if (!firebaseConfig) {
+                console.warn("Firebase not configured. Running in UI-only mode.");
+                renderDaysNavigation();
+                renderWorkoutList();
+                showToast("Modo Offline (Dados não serão salvos)", 'error');
+                return;
+            }
+
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                const auth = getAuth(app);
+
+                // Authentication Protocol
+                const customToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                
+                if (customToken) {
+                    await signInWithCustomToken(auth, customToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Auth State Observer
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        activeUserId = user.uid;
+                        authStatusEl.innerHTML = '<i class="ph-fill ph-check-circle text-emerald-400 text-xl"></i>';
+                        authStatusEl.classList.add('border-emerald-500', 'shadow-neon');
+                        authStatusEl.classList.remove('border-slate-600');
+                        
+                        setupRealtimeSync(activeUserId);
+                    } else {
+                        activeUserId = null;
+                        authStatusEl.innerHTML = '<i class="ph ph-user text-slate-400"></i>';
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase init error:", error);
+                showToast("Erro ao conectar base de dados", "error");
+                renderDaysNavigation();
+                renderWorkoutList();
+            }
+        }
+
+        // Real-time synchronization using strictly mandated paths
+        function setupRealtimeSync(userId) {
+            const loadsCollection = collection(db, 'artifacts', appId, 'users', userId, 'exerciseLoads');
+            
+            onSnapshot(loadsCollection, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added" || change.type === "modified") {
+                        const data = change.doc.data();
+                        const exerciseId = change.doc.id;
+                        exerciseLoads[exerciseId] = data.weight;
+                        
+                        // Update UI if we are currently looking at the changed exercise
+                        updateLoadDisplay(exerciseId);
+                        
+                        // Also update input value if it's currently empty or we want to sync across devices
+                        const inputEl = document.getElementById(`input-${exerciseId}`);
+                        if (inputEl && !inputEl.value) {
+                             inputEl.value = data.weight;
+                        }
+                    }
+                    if (change.type === "removed") {
+                        delete exerciseLoads[change.doc.id];
+                        updateLoadDisplay(change.doc.id);
+                    }
+                });
+                
+                // Initial render after data is loaded (only on first connection)
+                if (workoutContainerEl.innerHTML.includes('ph-spinner-gap')) {
+                    renderDaysNavigation();
+                    renderWorkoutList();
+                }
+            }, (error) => {
+                console.error("Firestore sync error:", error);
+                showToast("Erro ao sincronizar dados.", 'error');
+            });
+        }
+
+        // --- Start App ---
+        // Render empty state immediately, auth will trigger data populate
+        renderDaysNavigation();
+        initializeAppWithAuth();
+
     </script>
 </body>
 </html>
